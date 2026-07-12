@@ -61,6 +61,7 @@ defmodule Odyssie.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
         "esbuild default --minify",
+        "tailwind default --minify",
         "phx.digest"
       ]
     ]
