@@ -4,7 +4,6 @@ defmodule OdyssieWeb.CoreComponents do
   """
 
   use Phoenix.Component
-  use Phoenix.VerifiedRoutes
 
   import Phoenix.LiveView.Helpers
 
