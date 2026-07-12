@@ -1,5 +1,5 @@
-const { Socket } = require("phoenix")
-const { LiveSocket } = require("phoenix_live_view")
+import { Socket } from "phoenix"
+import { LiveSocket } from "phoenix_live_view"
 
 let Hooks = {}
 
