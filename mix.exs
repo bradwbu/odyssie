@@ -43,8 +43,8 @@ defmodule Odyssie.MixProject do
       {:pbkdf2_elixir, "~> 2.0"},
       {:bcrypt_elixir, "~> 3.0"},
       {:plug_cowboy, "~> 2.5"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.8"},
+      {:tailwind, "~> 0.2"},
       {:heroicons, "~> 0.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
