@@ -9,25 +9,26 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:form, %{name: "", email: "", username: "", password: ""})
+     |> assign(:form, %{"name" => "", "email" => "", "username" => "", "password" => ""})
      |> assign(:errors, %{})
      |> assign(:loading, false)}
   end
 
   @impl true
-  def handle_event("update_field", %{"field" => field, "value" => value}, socket) do
-    form = Map.put(socket.assigns.form, field, value)
-    {:noreply, assign(socket, form: form)}
+  def handle_event("update", params, socket) do
+    form =
+      Map.take(params, ["name", "email", "username", "password"])
+      |> Map.merge(socket.assigns.form, fn _key, new, _old -> new end)
+
+    {:noreply, assign(socket, :form, form)}
   end
 
-  def handle_event("register", _params, socket) do
-    %{name: name, email: email, username: username, password: password} = socket.assigns.form
-
+  def handle_event("register", params, socket) do
     attrs = %{
-      display_name: name,
-      email: email,
-      username: username,
-      password: password
+      display_name: params["name"],
+      email: params["email"],
+      username: params["username"],
+      password: params["password"]
     }
 
     case Odyssie.Accounts.register_user(attrs) do
@@ -49,6 +50,12 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
         {:noreply,
          socket
          |> assign(:errors, errors)
+         |> assign(:form, %{
+           "name" => params["name"],
+           "email" => params["email"],
+           "username" => params["username"],
+           "password" => ""
+         })
          |> assign(:loading, false)}
     end
   end
@@ -65,15 +72,13 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
           <h1 class="text-3xl font-extrabold">Create your account</h1>
         </div>
 
-        <form phx-submit="register" class="space-y-4">
+        <form phx-submit="register" phx-change="update" class="space-y-4">
           <div>
             <input type="text"
                    name="name"
-                   value={@form.name}
+                   value={@form["name"]}
                    placeholder="Name"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:display_name], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
-                   phx-keyup="update_field"
-                   phx-value-field="name"
                    required="true" />
             <%= if @errors[:display_name] do %>
               <p class="text-red-500 text-xs mt-1"><%= hd(@errors[:display_name]) %></p>
@@ -83,11 +88,9 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
           <div>
             <input type="email"
                    name="email"
-                   value={@form.email}
+                   value={@form["email"]}
                    placeholder="Email"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:email], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
-                   phx-keyup="update_field"
-                   phx-value-field="email"
                    required="true" />
             <%= if @errors[:email] do %>
               <p class="text-red-500 text-xs mt-1"><%= hd(@errors[:email]) %></p>
@@ -97,11 +100,9 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
           <div>
             <input type="text"
                    name="username"
-                   value={@form.username}
+                   value={@form["username"]}
                    placeholder="Username"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:username], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
-                   phx-keyup="update_field"
-                   phx-value-field="username"
                    required="true" />
             <%= if @errors[:username] do %>
               <p class="text-red-500 text-xs mt-1"><%= hd(@errors[:username]) %></p>
@@ -111,11 +112,9 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
           <div>
             <input type="password"
                    name="password"
-                   value={@form.password}
+                   value={@form["password"]}
                    placeholder="Password (min 8 characters)"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:password], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
-                   phx-keyup="update_field"
-                   phx-value-field="password"
                    required="true" />
             <%= if @errors[:password] do %>
               <p class="text-red-500 text-xs mt-1"><%= hd(@errors[:password]) %></p>
@@ -124,7 +123,7 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
 
           <button type="submit"
                   class="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 rounded-full text-sm disabled:opacity-50 mt-6"
-                  disabled={@form.email == "" or @form.password == "" or @form.username == "" or @form.name == ""}>
+                  disabled={@form["email"] == "" or @form["password"] == "" or @form["username"] == "" or @form["name"] == ""}>
             Create account
           </button>
         </form>

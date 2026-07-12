@@ -16,17 +16,22 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
   end
 
   @impl true
-  def handle_event("update_email", %{"value" => value}, socket) do
-    {:noreply, assign(socket, email: value)}
+  def handle_event("update", %{"email" => email, "password" => password}, socket) do
+    {:noreply,
+     socket
+     |> assign(:email, email)
+     |> assign(:password, password)}
   end
 
-  def handle_event("update_password", %{"value" => value}, socket) do
-    {:noreply, assign(socket, password: value)}
+  def handle_event("update", %{"email" => email}, socket) do
+    {:noreply, assign(socket, :email, email)}
   end
 
-  def handle_event("login", _params, socket) do
-    %{email: email, password: password} = socket.assigns
+  def handle_event("update", %{"password" => password}, socket) do
+    {:noreply, assign(socket, :password, password)}
+  end
 
+  def handle_event("login", %{"email" => email, "password" => password}, socket) do
     case Odyssie.Accounts.authenticate_by_email_password(email, password) do
       {:ok, user} ->
         {:ok, token} = Odyssie.Accounts.generate_session_token(user)
@@ -39,6 +44,8 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
         {:noreply,
          socket
          |> assign(:error, format_error(reason))
+         |> assign(:email, email)
+         |> assign(:password, "")
          |> assign(:loading, false)}
     end
   end
@@ -65,14 +72,13 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
           </div>
         <% end %>
 
-        <form phx-submit="login" class="space-y-4">
+        <form phx-submit="login" phx-change="update" class="space-y-4">
           <div>
             <input type="email"
                    name="email"
                    value={@email}
                    placeholder="Email address"
                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
-                   phx-keyup="update_email"
                    required="true" />
           </div>
 
@@ -82,7 +88,6 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
                    value={@password}
                    placeholder="Password"
                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
-                   phx-keyup="update_password"
                    required="true" />
           </div>
 
