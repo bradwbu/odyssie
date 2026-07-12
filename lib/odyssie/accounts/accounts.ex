@@ -24,14 +24,20 @@ defmodule Odyssie.Accounts do
     |> Repo.one()
   end
 
-  def get_user_for_session(token) do
-    now = DateTime.utc_now()
+  def get_user_for_session(encoded_token) do
+    case Base.url_decode64(encoded_token, padding: false) do
+      {:ok, token} ->
+        now = DateTime.utc_now()
 
-    Token
-    |> join(:inner, [t], u in assoc(t, :user), as: :user)
-    |> where([t, user: u], t.token == ^token and t.expires_at > ^now)
-    |> select([t, user: u], u)
-    |> Repo.one()
+        Token
+        |> join(:inner, [t], u in assoc(t, :user), as: :user)
+        |> where([t, user: u], t.token == ^token and t.expires_at > ^now)
+        |> select([t, user: u], u)
+        |> Repo.one()
+
+      :error ->
+        nil
+    end
   end
 
   # ── Registration ──────────────────────────────────────────────────────
@@ -82,15 +88,21 @@ defmodule Odyssie.Accounts do
       })
 
     case Repo.insert(changeset) do
-      {:ok, _} -> {:ok, token}
+      {:ok, _} -> {:ok, Base.url_encode64(token, padding: false)}
       error -> error
     end
   end
 
-  def delete_session_token(token) do
-    Token
-    |> where([t], t.token == ^token)
-    |> Repo.delete_all()
+  def delete_session_token(encoded_token) do
+    case Base.url_decode64(encoded_token, padding: false) do
+      {:ok, token} ->
+        Token
+        |> where([t], t.token == ^token)
+        |> Repo.delete_all()
+
+      :error ->
+        {0, nil}
+    end
   end
 
   # ── Social Graph ─────────────────────────────────────────────────────
