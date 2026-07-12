@@ -10,6 +10,7 @@ defmodule Odyssie.Application do
       Odyssie.Repo,
       {DNSCluster, query: Application.get_env(:odyssie, :dns_query) || :ignore},
       {Phoenix.PubSub, name: Odyssie.PubSub},
+      {Finch, name: Odyssie.Finch},
       Odyssie.Accounts.Presence,
       Odyssie.Chat.DMSubscriber,
       {Task.Supervisor, name: Odyssie.TaskSupervisor},

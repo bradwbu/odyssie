@@ -24,6 +24,8 @@ config :logger, :console,
 
 config :phoenix, :json_library, Jason
 
+config :swoosh, :api_client, Swoosh.ApiClient.Finch
+
 config :esbuild,
   version: "0.17.18",
   default: [
