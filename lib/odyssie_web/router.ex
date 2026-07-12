@@ -20,6 +20,7 @@ defmodule OdyssieWeb.Router do
     pipe_through :browser
 
     get "/session/set/:token", SessionController, :set_token
+    get "/logout", SessionController, :logout
 
     live_session :require_no_user,
       on_mount: [{OdyssieWeb.Hooks, :require_no_user}] do

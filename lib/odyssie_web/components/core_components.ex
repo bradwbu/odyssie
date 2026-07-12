@@ -4,6 +4,7 @@ defmodule OdyssieWeb.CoreComponents do
   """
 
   use Phoenix.Component
+  import Phoenix.LiveView.JS
 
   alias Odyssie.Feed.Post
 
@@ -68,8 +69,8 @@ defmodule OdyssieWeb.CoreComponents do
 
           <div class="mt-3 flex items-center space-x-12 text-gray-500">
             <button class="flex items-center space-x-1 hover:text-blue-500 group"
-                    phx-click="reply" phx-value-id={@post.id}
-                    phx-click="stop_propagation">
+                    phx-click={JS.push("reply") |> JS.stopPropagation()}
+                    phx-value-id={@post.id}>
               <svg class="w-5 h-5 group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -78,8 +79,8 @@ defmodule OdyssieWeb.CoreComponents do
             </button>
 
             <button class="flex items-center space-x-1 hover:text-green-500 group"
-                    phx-click="repost" phx-value-id={@post.id}
-                    phx-click="stop_propagation">
+                    phx-click={JS.push("repost") |> JS.stopPropagation()}
+                    phx-value-id={@post.id}>
               <svg class="w-5 h-5 group-hover:text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -90,9 +91,8 @@ defmodule OdyssieWeb.CoreComponents do
             </button>
 
             <button class="flex items-center space-x-1 hover:text-red-500 group"
-                    phx-click={if @post.liked_by_me, do: "unlike", else: "like"}
-                    phx-value-id={@post.id}
-                    phx-click="stop_propagation">
+                    phx-click={JS.push(if(@post.liked_by_me, do: "unlike", else: "like")) |> JS.stopPropagation()}
+                    phx-value-id={@post.id}>
               <svg class={"w-5 h-5 #{if @post.liked_by_me, do: "text-red-500 fill-red-500", else: "group-hover:text-red-500"}"}
                    fill={if @post.liked_by_me, do: "currentColor", else: "none"}
                    viewBox="0 0 24 24" stroke="currentColor">
@@ -149,26 +149,25 @@ defmodule OdyssieWeb.CoreComponents do
     ~H"""
     <div class="compose-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-12"
          phx-click="close_compose">
-      <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl" phx-click="stop_propagation">
+      <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl" phx-click={JS.stopPropagation()}>
         <div class="flex items-center p-3">
-          <button class="text-gray-500 hover:text-gray-700 p-2" phx-click="close_compose">
+          <button class="text-gray-500 hover:text-gray-700 p-2" phx-click={JS.push("close_compose") |> JS.stopPropagation()}>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
         </div>
-        <div class="p-4">
+        <.form for={%{}} phx-submit="submit_post" class="p-4">
           <textarea
             class="w-full resize-none border-none outline-none text-lg placeholder-gray-500 min-h-[120px]"
             placeholder="What's happening?"
             maxlength="280"
-            phx-keyup="update_char_count"
-            phx-key="keyup"
+            phx-change="update_char_count"
             name="post[content]"
           />
           <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
             <div class="flex items-center space-x-3 text-blue-500">
-              <button class="hover:bg-blue-50 p-2 rounded-full">
+              <button type="button" class="hover:bg-blue-50 p-2 rounded-full">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -179,14 +178,14 @@ defmodule OdyssieWeb.CoreComponents do
               <span class={"text-sm #{if (@char_count || 0) > 260, do: "text-red-500", else: "text-gray-500"}"}>
                 <%= @char_count || 0 %>/280
               </span>
-              <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full text-sm disabled:opacity-50"
-                      disabled={(@char_count || 0) > 280 or (@char_count || 0) == 0}
-                      phx-click="submit_post">
+              <button type="submit"
+                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full text-sm disabled:opacity-50"
+                      disabled={(@char_count || 0) > 280 or (@char_count || 0) == 0}>
                 Post
               </button>
             </div>
           </div>
-        </div>
+        </.form>
       </div>
     </div>
     """

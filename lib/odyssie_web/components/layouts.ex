@@ -102,13 +102,28 @@ defmodule OdyssieWeb.Layouts do
 
             <%= if @current_user do %>
               <%!-- Post Button --%>
-              <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-8 rounded-full w-full mt-4 mb-24"
+              <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-8 rounded-full w-full mt-4"
                       phx-click="open_compose">
                 <span class="hidden xl:block">Post</span>
                 <svg class="w-6 h-6 xl:hidden mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
               </button>
+
+              <%!-- User Info + Logout --%>
+              <a href={"/#{@current_user.username}"} class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 mt-4 group">
+                <img src={@current_user.avatar_url || "/images/default-avatar.png"} class="w-10 h-10 rounded-full" />
+                <div class="hidden xl:block ml-3 flex-1 min-w-0">
+                  <div class="font-bold text-sm truncate"><%= @current_user.display_name || @current_user.username %></div>
+                  <div class="text-gray-500 text-sm truncate">@<%= @current_user.username %></div>
+                </div>
+              </a>
+              <a href="/logout" class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 text-xl group mb-24">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                <span class="hidden xl:block ml-5 text-xl">Log out</span>
+              </a>
             <% end %>
           </div>
         </aside>

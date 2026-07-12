@@ -45,12 +45,36 @@ defmodule OdyssieWeb.HomeLive.Index do
     {:noreply, assign(socket, composing: false)}
   end
 
-  def handle_event("update_char_count", %{"value" => value}, socket) do
+  def handle_event("update_char_count", %{"post" => %{"content" => value}}, socket) do
     {:noreply, assign(socket, char_count: String.length(value))}
   end
 
-  def handle_event("submit_post", _params, socket) do
-    {:noreply, socket}
+  def handle_event("submit_post", %{"post" => %{"content" => content}}, socket) do
+    trimmed = content |> String.trim()
+
+    if trimmed != "" and String.length(trimmed) <= 280 do
+      case Feed.create_post(socket.assigns.current_user, %{content: trimmed}) do
+        {:ok, _post} ->
+          {:noreply, socket |> assign(composing: false, char_count: 0)}
+
+        {:error, _} ->
+          {:noreply, socket}
+      end
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("switch_tab", %{"tab" => tab}, socket) do
+    tab_atom = String.to_existing_atom(tab)
+    timeline = Feed.home_timeline(socket.assigns.current_user)
+
+    {:noreply,
+     socket
+     |> assign(:tab, tab_atom)
+     |> assign(:timeline, timeline)
+     |> assign(:new_posts_count, 0)
+     |> assign(:pending_posts, [])}
   end
 
   def handle_event("show_new_posts", _params, socket) do

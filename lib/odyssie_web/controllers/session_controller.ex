@@ -32,6 +32,19 @@ defmodule OdyssieWeb.SessionController do
     |> send_resp(302, "")
   end
 
+  def logout(conn, _params) do
+    token = get_session(conn, :user_token)
+
+    if token do
+      Odyssie.Accounts.delete_session_token(token)
+    end
+
+    conn
+    |> configure_session(drop: true)
+    |> put_resp_header("location", "/login")
+    |> send_resp(302, "")
+  end
+
   def set_token(conn, %{"token" => token}) do
     conn
     |> put_session(:user_token, token)

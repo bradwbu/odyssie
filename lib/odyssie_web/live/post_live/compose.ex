@@ -15,13 +15,15 @@ defmodule OdyssieWeb.PostLive.Compose do
   end
 
   @impl true
-  def handle_event("update_content", %{"value" => value}, socket) do
+  def handle_event("update_content", %{"post" => %{"content" => value}}, socket) do
     {:noreply, assign(socket, content: value, char_count: String.length(value))}
   end
 
-  def handle_event("submit_post", _params, socket) do
-    if String.trim(socket.assigns.content) != "" and socket.assigns.char_count <= 280 do
-      case Feed.create_post(socket.assigns.current_user, %{content: String.trim(socket.assigns.content)}) do
+  def handle_event("submit_post", %{"post" => %{"content" => content}}, socket) do
+    trimmed = content |> String.trim()
+
+    if trimmed != "" and String.length(trimmed) <= 280 do
+      case Feed.create_post(socket.assigns.current_user, %{content: trimmed}) do
         {:ok, post} ->
           {:noreply, push_navigate(socket, to: "/post/#{post.id}")}
 
@@ -50,11 +52,13 @@ defmodule OdyssieWeb.PostLive.Compose do
               </svg>
             </button>
           </div>
-          <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-5 rounded-full text-sm disabled:opacity-50"
-                  disabled={@char_count > 280 or @char_count == 0}
-                  phx-click="submit_post">
-            Post
-          </button>
+          <.form for={%{}} phx-submit="submit_post">
+            <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-5 rounded-full text-sm disabled:opacity-50"
+                    disabled={@char_count > 280 or @char_count == 0}>
+              Post
+            </button>
+          </.form>
         </div>
       </header>
 
@@ -67,8 +71,8 @@ defmodule OdyssieWeb.PostLive.Compose do
               class="w-full resize-none border-none outline-none text-lg placeholder-gray-500 min-h-[200px]"
               placeholder="What's happening?"
               maxlength="280"
-              phx-keyup="update_content"
-              phx-key="keyup"
+              phx-change="update_content"
+              name="post[content]"
               autofocus="true"
             />
             <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">

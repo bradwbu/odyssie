@@ -10,6 +10,8 @@ defmodule Odyssie.Feed.Post do
     field :likes_count, :integer, default: 0
     field :reposts_count, :integer, default: 0
     field :replies_count, :integer, default: 0
+    field :views_count, :integer, default: 0
+    field :media_urls, {:array, :string}, default: []
 
     field :post_type, Ecto.Enum,
       values: [:post, :reply, :repost, :quote],
@@ -33,7 +35,7 @@ defmodule Odyssie.Feed.Post do
   end
 
   @required [:content, :author_id]
-  @optional [:parent_id, :source_post_id, :post_type]
+  @optional [:parent_id, :source_post_id, :post_type, :media_urls]
 
   def changeset(post, attrs) do
     post
