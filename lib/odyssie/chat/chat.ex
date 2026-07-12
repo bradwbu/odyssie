@@ -105,7 +105,7 @@ defmodule Odyssie.Chat do
 
   def get_conversation(%User{id: user_id}, other_user_id, opts \\ []) do
     limit = Keyword.get(opts, :limit, 50)
-    before_cursor = Keyword.get(opts, :before])
+    before_cursor = Keyword.get(opts, :before, nil)
 
     query =
       Message
