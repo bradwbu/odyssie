@@ -29,6 +29,12 @@ defmodule OdyssieWeb.Layouts do
   end
 
   def app(assigns) do
+    assigns =
+      assigns
+      |> Map.put_new(:current_user, nil)
+      |> Map.put_new(:unread_messages, 0)
+      |> Map.put_new(:unread_notifications, 0)
+
     ~H"""
     <div class="min-h-screen flex justify-center">
       <div class="flex w-full max-w-[1280px]">
@@ -59,47 +65,51 @@ defmodule OdyssieWeb.Layouts do
                   <span class="hidden xl:block ml-5 text-xl">Explore</span>
                 </a>
 
-                <a href="/notifications" class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 text-xl group relative">
-                  <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                  </svg>
-                  <span class="hidden xl:block ml-5 text-xl">Notifications</span>
-                  <%= if @unread_notifications > 0 do %>
-                    <span class="absolute -top-1 -right-1 xl:static xl:ml-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      <%= min(@unread_notifications, 9) %><%= if @unread_notifications > 9, do: "+" %>
-                    </span>
-                  <% end %>
-                </a>
+                <%= if @current_user do %>
+                  <a href="/notifications" class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 text-xl group relative">
+                    <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    <span class="hidden xl:block ml-5 text-xl">Notifications</span>
+                    <%= if @unread_notifications > 0 do %>
+                      <span class="absolute -top-1 -right-1 xl:static xl:ml-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        <%= min(@unread_notifications, 9) %><%= if @unread_notifications > 9, do: "+" %>
+                      </span>
+                    <% end %>
+                  </a>
 
-                <a href="/messages" class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 text-xl group relative">
-                  <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                  </svg>
-                  <span class="hidden xl:block ml-5 text-xl">Messages</span>
-                  <%= if @unread_messages > 0 do %>
-                    <span class="absolute -top-1 -right-1 xl:static xl:ml-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      <%= min(@unread_messages, 9) %><%= if @unread_messages > 9, do: "+" %>
-                    </span>
-                  <% end %>
-                </a>
+                  <a href="/messages" class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 text-xl group relative">
+                    <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="hidden xl:block ml-5 text-xl">Messages</span>
+                    <%= if @unread_messages > 0 do %>
+                      <span class="absolute -top-1 -right-1 xl:static xl:ml-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        <%= min(@unread_messages, 9) %><%= if @unread_messages > 9, do: "+" %>
+                      </span>
+                    <% end %>
+                  </a>
 
-                <a href={"/#{@current_user.username}"} class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 text-xl group">
-                  <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                  </svg>
-                  <span class="hidden xl:block ml-5 text-xl">Profile</span>
-                </a>
+                  <a href={"/#{@current_user.username}"} class="flex items-center justify-center xl:justify-start p-3 rounded-full hover:bg-gray-100 text-xl group">
+                    <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <span class="hidden xl:block ml-5 text-xl">Profile</span>
+                  </a>
+                <% end %>
               </nav>
             </div>
 
-            <%!-- Post Button --%>
-            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-8 rounded-full w-full mt-4 mb-24"
-                    phx-click="open_compose">
-              <span class="hidden xl:block">Post</span>
-              <svg class="w-6 h-6 xl:hidden mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-            </button>
+            <%= if @current_user do %>
+              <%!-- Post Button --%>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-8 rounded-full w-full mt-4 mb-24"
+                      phx-click="open_compose">
+                <span class="hidden xl:block">Post</span>
+                <svg class="w-6 h-6 xl:hidden mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </button>
+            <% end %>
           </div>
         </aside>
 
@@ -166,6 +176,12 @@ defmodule OdyssieWeb.Layouts do
         </aside>
       </div>
     </div>
+    """
+  end
+
+  def auth(assigns) do
+    ~H"""
+    <%= @inner_content %>
     """
   end
 end
