@@ -14,13 +14,6 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
      |> assign(:error, nil)
      |> assign(:loading, false)}
   end
-    {:ok,
-     socket
-     |> assign(:email, "")
-     |> assign(:password, "")
-     |> assign(:error, nil)
-     |> assign(:loading, false)}
-  end
 
   @impl true
   def handle_event("update_email", %{"value" => value}, socket) do
