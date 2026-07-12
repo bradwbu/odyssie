@@ -33,7 +33,7 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
 
         {:noreply,
          socket
-         |> put_session(:user_token, token)
+         |> Phoenix.LiveView.put_session(:user_token, token)
          |> redirect(to: "/home")}
 
       {:error, reason} ->
