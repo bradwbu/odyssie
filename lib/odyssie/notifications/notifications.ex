@@ -5,6 +5,7 @@ defmodule Odyssie.Notifications do
 
   import Ecto.Query
   alias Odyssie.Repo
+  alias Odyssie.Accounts.User
   alias Odyssie.Notifications.Notification
 
   def list_notifications(%User{id: user_id}, opts \\ []) do
