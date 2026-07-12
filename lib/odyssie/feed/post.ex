@@ -55,11 +55,13 @@ defmodule Odyssie.Feed.Post do
     content
     |> String.split(~r/([@#][\w]+)/, include_captures: true, trim: true)
     |> Enum.map(fn
-      <<"@" <> _rest = mention> ->
-        %{type: :mention, text: mention, username: String.downcase(String.slice(mention, 1..-1//1))}
+      <<"@" <> rest>> ->
+        mention = "@" <> rest
+        %{type: :mention, text: mention, username: String.downcase(rest)}
 
-      <<"#" <> _rest = hashtag> ->
-        %{type: :hashtag, text: hashtag, tag: String.downcase(String.slice(hashtag, 1..-1//1))}
+      <<"#" <> rest>> ->
+        hashtag = "#" <> rest
+        %{type: :hashtag, text: hashtag, tag: String.downcase(rest)}
 
       text ->
         %{type: :text, text: text}
