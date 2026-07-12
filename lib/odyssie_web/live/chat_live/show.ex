@@ -37,7 +37,7 @@ defmodule OdyssieWeb.ChatLive.Show do
          |> assign(:next_cursor, conversation.next_cursor)
          |> assign(:message_input, "")
          |> assign(:typing, false)
-         |> temporary_assigns([messages: [])}
+         |> assign(:messages, [])}
     end
   end
 
