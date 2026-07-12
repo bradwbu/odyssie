@@ -44,11 +44,6 @@ defmodule Odyssie.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:plug_cowboy, "~> 2.5"},
       {:heroicons, "~> 0.5"},
-      {:earmark, "~> 1.4"},
-      {:ex_aws, "~> 2.4"},
-      {:ex_aws_s3, "~> 2.4"},
-      {:hackney, "~> 1.18"},
-      {:sweet_xml, "~> 0.7"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]

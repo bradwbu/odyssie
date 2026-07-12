@@ -17,6 +17,7 @@ defmodule Odyssie.Accounts.User do
     field :avatar_url, :string
     field :header_url, :string
     field :is_verified, :boolean, default: false
+    field :is_admin, :boolean, default: false
     field :is_private, :boolean, default: false
     field :followers_count, :integer, default: 0
     field :following_count, :integer, default: 0
@@ -43,7 +44,7 @@ defmodule Odyssie.Accounts.User do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, @required ++ @optional)
+    |> cast(attrs, @required ++ @optional ++ [:is_admin])
     |> validate_required(@required)
     |> validate_username()
     |> validate_email()

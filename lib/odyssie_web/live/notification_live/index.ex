@@ -5,7 +5,7 @@ defmodule OdyssieWeb.NotificationLive.Index do
   """
 
   use OdyssieWeb, :live_view
-  alias Odyssie.{Notifications, Feed, Accounts}
+  alias Odyssie.Notifications
 
   @impl true
   def mount(_params, _session, socket) do

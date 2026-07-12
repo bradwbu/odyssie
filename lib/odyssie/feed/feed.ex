@@ -103,7 +103,7 @@ defmodule Odyssie.Feed do
 
   # ── Reposts ──────────────────────────────────────────────────────────
 
-  def repost(%User{id: user_id} = user, %Post{id: post_id} = original_post) do
+  def repost(%User{id: user_id} = user, %Post{id: post_id} = _original_post) do
     result =
       %Repost{}
       |> Repost.changeset(%{user_id: user_id, post_id: post_id})

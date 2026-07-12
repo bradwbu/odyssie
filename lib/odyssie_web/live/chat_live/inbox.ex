@@ -28,7 +28,7 @@ defmodule OdyssieWeb.ChatLive.Inbox do
   # ── PubSub ───────────────────────────────────────────────────────────
 
   @impl true
-  def handle_info({:dm_inbox_update, message}, socket) do
+  def handle_info({:dm_inbox_update, _message}, socket) do
     conversations = Chat.list_conversations(socket.assigns.current_user)
 
     {:noreply,

@@ -156,8 +156,7 @@ defmodule OdyssieWeb.ChatLive.Show do
       </header>
 
       <%!-- Messages Area --%>
-      <div id="messages-container" class="flex-1 overflow-y-auto px-4 py-4 space-y-4"
-           phx-update="append">
+      <div id="messages-container" class="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         <%= if @has_more do %>
           <button class="w-full text-center py-2 text-blue-500 text-sm hover:bg-blue-50 rounded-lg"
                   phx-click="load_more">
