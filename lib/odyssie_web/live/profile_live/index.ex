@@ -38,7 +38,7 @@ defmodule OdyssieWeb.ProfileLive.Index do
   end
 
   @impl true
-  def handle_params(%{"username" => username}, _uri, socket) do
+  def handle_params(%{"username" => username}, uri, socket) do
     if socket.assigns.profile_user.username != username do
       case Accounts.get_user_by_username(username) do
         nil ->
@@ -46,7 +46,7 @@ defmodule OdyssieWeb.ProfileLive.Index do
 
         user ->
           is_following = Accounts.following?(socket.assigns.current_user, user)
-          tab = detect_tab_from_uri(_uri)
+          tab = detect_tab_from_uri(uri)
 
           timeline = Feed.user_timeline(
             socket.assigns.current_user,
@@ -62,7 +62,7 @@ defmodule OdyssieWeb.ProfileLive.Index do
            |> assign(:timeline, timeline)}
       end
     else
-      tab = detect_tab_from_uri(_uri)
+      tab = detect_tab_from_uri(uri)
 
       timeline = Feed.user_timeline(
         socket.assigns.current_user,

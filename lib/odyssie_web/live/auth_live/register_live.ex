@@ -36,8 +36,7 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
 
         {:noreply,
          socket
-         |> Phoenix.LiveView.put_session(:user_token, token)
-         |> redirect(to: "/home")}
+         |> redirect(to: "/session/set/#{token}")}
 
       {:error, changeset} ->
         errors =

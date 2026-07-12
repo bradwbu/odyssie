@@ -6,7 +6,7 @@ defmodule OdyssieWeb.Layouts do
 
   use Phoenix.Component
   use Phoenix.VerifiedRoutes, endpoint: OdyssieWeb.Endpoint, router: OdyssieWeb.Router, statics: OdyssieWeb.static_paths()
-  import Phoenix.Controller, only: [get_csrf_token: 0, view_module: 1, view_template: 1]
+  import Phoenix.Controller, only: [get_csrf_token: 0]
 
   def root(assigns) do
     ~H"""

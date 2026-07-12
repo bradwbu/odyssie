@@ -31,4 +31,10 @@ defmodule OdyssieWeb.SessionController do
     |> put_resp_header("location", "/login")
     |> send_resp(302, "")
   end
+
+  def set_token(conn, %{"token" => token}) do
+    conn
+    |> put_session(:user_token, token)
+    |> redirect(to: "/home")
+  end
 end

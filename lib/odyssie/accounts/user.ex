@@ -22,7 +22,7 @@ defmodule Odyssie.Accounts.User do
     field :following_count, :integer, default: 0
     field :posts_count, :integer, default: 0
 
-    has_many :posts, Odyssie.Feed.Post
+    has_many :posts, Odyssie.Feed.Post, foreign_key: :author_id
     has_many :likes, Odyssie.Feed.Like
     has_many :reposts, Odyssie.Feed.Repost
     has_many :sent_messages, Odyssie.Chat.Message, foreign_key: :sender_id

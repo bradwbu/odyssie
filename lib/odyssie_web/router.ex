@@ -19,6 +19,8 @@ defmodule OdyssieWeb.Router do
   scope "/", OdyssieWeb do
     pipe_through :browser
 
+    get "/session/set/:token", SessionController, :set_token
+
     live_session :require_no_user,
       on_mount: [{OdyssieWeb.Hooks, :require_no_user}] do
       live "/login", AuthLive.LoginLive, :new

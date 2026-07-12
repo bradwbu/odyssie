@@ -5,7 +5,7 @@ defmodule OdyssieWeb.CoreComponents do
 
   use Phoenix.Component
 
-  import Phoenix.LiveView.Helpers
+  alias Odyssie.Feed.Post
 
   @doc """
   Renders the classic Odyssie blue checkmark for verified users.

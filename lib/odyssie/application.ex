@@ -19,9 +19,4 @@ defmodule Odyssie.Application do
     opts = [strategy: :one_for_one, name: Odyssie.Supervisor]
     Supervisor.start_link(children, opts)
   end
-
-  @impl true
-  def config_changing(changed) do
-    OdyssieWeb.Endpoint.config_change(changed, [])
-  end
 end

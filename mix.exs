@@ -42,7 +42,6 @@ defmodule Odyssie.MixProject do
       {:finch, "~> 0.13"},
       {:pbkdf2_elixir, "~> 2.0"},
       {:bcrypt_elixir, "~> 3.0"},
-      {:image, "~> 0.30"},
       {:heroicons, "~> 0.5"},
       {:earmark, "~> 1.4"},
       {:ex_aws, "~> 2.4"},
