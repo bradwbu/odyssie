@@ -45,6 +45,10 @@ defmodule OdyssieWeb.HomeLive.Index do
     {:noreply, assign(socket, composing: false)}
   end
 
+  def handle_event("stop_propagation", _params, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("update_char_count", %{"post" => %{"content" => value}}, socket) do
     {:noreply, assign(socket, char_count: String.length(value))}
   end

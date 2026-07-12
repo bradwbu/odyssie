@@ -105,7 +105,7 @@ defmodule OdyssieWeb.PostLive.Show do
     end
   end
 
-  def handle_event("update_reply", %{"value" => value}, socket) do
+  def handle_event("update_reply", %{"content" => value}, socket) do
     {:noreply, assign(socket, reply_content: value, char_count: String.length(value))}
   end
 
@@ -257,8 +257,7 @@ defmodule OdyssieWeb.PostLive.Show do
                         placeholder="Post your reply"
                         class="w-full resize-none border-none outline-none text-sm bg-transparent min-h-[60px]"
                         maxlength="280"
-                        phx-keyup="update_reply"
-                        phx-key="keyup" />
+                        phx-change="update_reply" />
               <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-200">
                 <span class={"text-xs #{if @char_count > 260, do: "text-red-500", else: "text-gray-400"}"}>
                   <%= @char_count %>/280

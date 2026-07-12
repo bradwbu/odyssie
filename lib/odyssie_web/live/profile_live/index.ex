@@ -141,6 +141,10 @@ defmodule OdyssieWeb.ProfileLive.Index do
     {:noreply, assign(socket, composing: false)}
   end
 
+  def handle_event("stop_propagation", _params, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("like", %{"id" => post_id}, socket) do
     post = Feed.get_post!(post_id)
     Feed.like_post(socket.assigns.current_user, post)

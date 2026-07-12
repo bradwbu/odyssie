@@ -5,7 +5,6 @@ defmodule OdyssieWeb.NotificationLive.Index do
   """
 
   use OdyssieWeb, :live_view
-  import Phoenix.LiveView.JS
   alias Odyssie.Notifications
 
   @impl true
@@ -154,7 +153,7 @@ defmodule OdyssieWeb.NotificationLive.Index do
                 <div class="flex items-center mb-1">
                   <img src={notification.actor.avatar_url || "/images/default-avatar.png"}
                        class="w-8 h-8 rounded-full mr-2"
-                       phx-click={JS.push("navigate_user") |> JS.stopPropagation()}
+                       phx-click="navigate_user"
                        phx-value-username={notification.actor.username} />
                   <%= if notification.actor.is_verified do %>
                     <.verified_badge />
@@ -162,7 +161,7 @@ defmodule OdyssieWeb.NotificationLive.Index do
                 </div>
                 <p class="text-gray-900 text-sm">
                   <span class="font-bold"
-                        phx-click={JS.push("navigate_user") |> JS.stopPropagation()}
+                        phx-click="navigate_user"
                         phx-value-username={notification.actor.username}>
                     <%= notification.actor.display_name || notification.actor.username %>
                   </span>

@@ -4,7 +4,6 @@ defmodule OdyssieWeb.CoreComponents do
   """
 
   use Phoenix.Component
-  import Phoenix.LiveView.JS
 
   alias Odyssie.Feed.Post
 
@@ -69,8 +68,7 @@ defmodule OdyssieWeb.CoreComponents do
 
           <div class="mt-3 flex items-center space-x-12 text-gray-500">
             <button class="flex items-center space-x-1 hover:text-blue-500 group"
-                    phx-click={JS.push("reply") |> JS.stopPropagation()}
-                    phx-value-id={@post.id}>
+                    phx-click="reply" phx-value-id={@post.id}>
               <svg class="w-5 h-5 group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -79,8 +77,7 @@ defmodule OdyssieWeb.CoreComponents do
             </button>
 
             <button class="flex items-center space-x-1 hover:text-green-500 group"
-                    phx-click={JS.push("repost") |> JS.stopPropagation()}
-                    phx-value-id={@post.id}>
+                    phx-click="repost" phx-value-id={@post.id}>
               <svg class="w-5 h-5 group-hover:text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -91,7 +88,7 @@ defmodule OdyssieWeb.CoreComponents do
             </button>
 
             <button class="flex items-center space-x-1 hover:text-red-500 group"
-                    phx-click={JS.push(if(@post.liked_by_me, do: "unlike", else: "like")) |> JS.stopPropagation()}
+                    phx-click={if(@post.liked_by_me, do: "unlike", else: "like")}
                     phx-value-id={@post.id}>
               <svg class={"w-5 h-5 #{if @post.liked_by_me, do: "text-red-500 fill-red-500", else: "group-hover:text-red-500"}"}
                    fill={if @post.liked_by_me, do: "currentColor", else: "none"}
@@ -149,9 +146,9 @@ defmodule OdyssieWeb.CoreComponents do
     ~H"""
     <div class="compose-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-12"
          phx-click="close_compose">
-      <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl" phx-click={JS.stopPropagation()}>
+      <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl" phx-click="stop_propagation">
         <div class="flex items-center p-3">
-          <button class="text-gray-500 hover:text-gray-700 p-2" phx-click={JS.push("close_compose") |> JS.stopPropagation()}>
+          <button class="text-gray-500 hover:text-gray-700 p-2" phx-click="close_compose">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
