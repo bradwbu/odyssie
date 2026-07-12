@@ -73,7 +73,6 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
                    placeholder="Name"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:display_name], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
                    phx-keyup="update_field"
-                   phx-key="keyup"
                    phx-value-field="name"
                    required="true" />
             <%= if @errors[:display_name] do %>
@@ -88,7 +87,6 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
                    placeholder="Email"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:email], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
                    phx-keyup="update_field"
-                   phx-key="keyup"
                    phx-value-field="email"
                    required="true" />
             <%= if @errors[:email] do %>
@@ -103,7 +101,6 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
                    placeholder="Username"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:username], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
                    phx-keyup="update_field"
-                   phx-key="keyup"
                    phx-value-field="username"
                    required="true" />
             <%= if @errors[:username] do %>
@@ -118,7 +115,6 @@ defmodule OdyssieWeb.AuthLive.RegisterLive do
                    placeholder="Password (min 8 characters)"
                    class={"w-full px-4 py-3 border rounded-lg focus:outline-none text-sm #{if @errors[:password], do: "border-red-500", else: "border-gray-300 focus:border-blue-500"}"}
                    phx-keyup="update_field"
-                   phx-key="keyup"
                    phx-value-field="password"
                    required="true" />
             <%= if @errors[:password] do %>

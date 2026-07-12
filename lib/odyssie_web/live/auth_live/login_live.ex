@@ -73,7 +73,6 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
                    placeholder="Email address"
                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
                    phx-keyup="update_email"
-                   phx-key="keyup"
                    required="true" />
           </div>
 
@@ -84,7 +83,6 @@ defmodule OdyssieWeb.AuthLive.LoginLive do
                    placeholder="Password"
                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm"
                    phx-keyup="update_password"
-                   phx-key="keyup"
                    required="true" />
           </div>
 
